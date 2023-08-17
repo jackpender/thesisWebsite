@@ -1,0 +1,235 @@
+*{
+    padding:0;
+    margin:0;
+    text-decoration: none;
+    list-style: none;
+    box-sizing: border-box;
+}
+body{
+    font-family: montserrat;
+}
+nav{
+    background: #0082e6;
+    height: 80px;
+    width: 100%;
+}
+label.logo{
+    color: white;
+    font-size: 35px;
+    line-height: 80px;
+    padding: 0 100px;
+    font-weight: bold;  
+}
+nav ul{
+    float: right;
+    margin-right: 20px;
+}
+nav ul li{
+    display: inline-block;
+    line-height: 80px;
+    margin: 0 5px;
+}
+nav ul li a{
+    color: white;
+    font-size: 17px;
+    padding: 7px 13;
+    border-radius: 3px;
+    text-transform: uppercase;
+}
+a.active, a:hover{
+    background: #1b9bff;
+    transition: .5s;
+
+}
+.checkbtn{
+    font-size: 30px;
+    color: white;
+    float: right;
+    line-height: 80px;
+    margin-right: 40px;
+    cursor: pointer;
+    display: none;
+}
+#check{
+    display: none;
+}
+@media (max-width: 952px){
+    label.logo{
+        font-size: 30px;
+        padding: 50px;
+    }
+    nav ul li a{
+        font-size: 16px;
+    }
+}
+@media (max-width: 858px){
+    .checkbtn{
+        display: block;
+    }
+    ul {
+        position: fixed;
+        width: 100%;
+        height: 100vh;
+        background: #2c3e50;
+        top: 80px;
+        left: 0;
+        text-align: center;
+        transition: all .5s;
+    }
+    nav ul li{
+        display: block;
+        margin: 50px 0;
+        line-height: 30px;
+    }
+    nav ul li a{
+        font-size: 20px;
+    }
+    a:hover,a.active{
+        background: none;
+        color: #0082e6;
+    }
+    #check:checked ~ ul{
+        left:0;
+    }
+}
+/* section{
+    background: url(bg1.jpg) no-repeat;
+    background-size: cover;
+    height: calc(100vh - 80px);
+} */
+
+/* img{
+    position: absolute;
+    top: 25px;
+    left: 25px;
+} */
+.pedal{
+    position: relative;
+    /* display: inline-table; */
+    margin-left: auto;
+    margin-right: auto;
+    width: 25%;
+    height:100%;
+    background-image: url("../media/overdrive_pedal_interface.png");
+    background-repeat: no-repeat;
+}
+#pedal_interface{
+    display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 25%;
+}
+#volume{
+    position:relative;
+  top: 46px;
+  left: 50px;
+}
+#gain{
+    position:relative;
+  top: 45px;
+  left: 106px;
+    /* z-index: 2; */
+}
+#tone{
+    position:absolute;
+  top: 115px;
+  left: 137px;
+    /* z-index: 2; z-index spicifies the order in which the items are layered */
+}
+
+
+/* .slider::before{
+    background: linear-gradient(
+        0deg, #525252 0%, #373737 100%
+    );
+    width: 10em;
+    height: 10em;
+    border-radius: 50%;
+    box-shadow: 0px -20px 20px #757575,
+    0px 20px 35px #111111,
+    inset 0px 5px 6px #979797,
+    inset 0px -5px 6px #242424;
+}
+.slider::before, .knob{
+    width: 10em;
+    height: 10em;
+    position: relative;
+}
+
+.knob::before, .knob::after, .slider::before{
+    content:'';
+    position:absolute;
+    border-radius: 50%;
+}
+
+.knob::before{
+    top:15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 10px;
+    background: #fff;
+    box-shadow: 0px 0px 10px #349beb;
+}
+
+.knob::after{
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 3px solid #fff;
+    width: 130%;
+    height: 130%;
+    box-shadow: 0px 0px 10px #349beb,
+    inset 0px 0px 10px #349beb;
+} */
+
+
+
+.slidecontainer {
+    width: 100%; /* Width of the outside container */
+}
+
+/* The slider itself */
+.slider {
+    -webkit-appearance: none;  /* Override default CSS styles */
+    appearance: none;
+    width: 100%; /* Full-width */
+    height: 25px; /* Specified height */
+    background: #d3d3d3; /* Grey background */
+    outline: none; /* Remove outline */
+    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+    -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+    transition: opacity .2s;
+  }
+  
+  /* Mouse-over effects */
+  .slider:hover {
+    opacity: 1; /* Fully shown on mouse-over */
+  }
+  
+  /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Override default look */
+    appearance: none;
+    width: 25px; /* Set a specific slider handle width */
+    height: 25px; /* Slider handle height */
+    background: #04AA6D; /* Green background */
+    cursor: pointer; /* Cursor on hover */
+  }
+  
+  .slider::-moz-range-thumb {
+    width: 25px; /* Set a specific slider handle width */
+    height: 25px; /* Slider handle height */
+    background: #04AA6D; /* Green background */
+    cursor: pointer; /* Cursor on hover */
+  }
+
+
+
+  /* .rotateImage {
+    transform: rotate(rangeValue);
+  } */
+
+
+
+

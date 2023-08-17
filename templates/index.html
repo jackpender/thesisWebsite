@@ -1,0 +1,193 @@
+<!--Typing html:5 utogenerates a standard html template-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/style.css')}}">
+    <script src="https://kit.fontawesome.com/79d7b172c7.js" crossorigin="anonymous"></script>
+    <!-- <script src="https://unpkg.com/p5ble@0.0.4/dist/p5.ble.js" type="text/javascript"></script>  -->
+    <title>Home</title>
+</head>
+<body>
+    <nav>
+        <input type="checkbox" id="check">
+        <label for="check" class="checkbtn">
+            <i class="fas fa-bars"></i>
+        </label>
+        <label class="logo">PedalConnect</label>
+        <ul>
+            <li><a class = "active" href="/">Home</a></li>
+            <li><a href="pedalboard">PedalBoard</a></li>
+            <li><a href="profile">Profile</a></li>
+        </ul>
+    </nav>
+    <section>
+
+    </section>
+    <div>
+        {% block content %}
+        <!-- <h1>Home Page</h1>
+        <p>Hello, {{deg}}!</p> -->
+        <!-- <div class="pedal"> -->
+            <!-- <form> -->
+                <button id="connect">Connect with BLE device</button>
+                <button id="start">Start</button>
+                <button id="stop">Stop</button>
+            <!-- </form> -->
+            <input type="text" id="presetName" name="presetName">
+            <div class="slidecontainer">
+                <input type="range" min="0" max="100" value="50" class="slider" id="volumeRange" oninput="volumeValue.innerText = this.value" onclick="volumeRotate()">
+                <p id="volumeValue">{{rangeValue}}</p>
+            </div>
+            <div class="slidecontainer">
+                <input type="range" min="0" max="100" value="50" class="slider" id="gainRange" oninput="gainValue.innerText = this.value" onclick="gainRotate()">
+                <p id="gainValue">{{rangeValue}}</p>
+            </div>
+            <div class="slidecontainer">
+                <input type="range" min="0" max="100" value="50" class="slider" id="toneRange" oninput="toneValue.innerText = this.value" onclick="toneRotate()">
+                <p id="toneValue">{{rangeValue}}</p>
+            </div>
+        <!-- </div> -->
+        <div class="pedal">
+            <!-- <img id="pedal_interface" src="../static/media/overdrive_pedal_interface.png"> -->
+            <img id="volume" src="../static/media/volume_gain_knob.png">
+            <img id="gain" src="../static/media/volume_gain_knob.png">
+            <img id="tone" src="../static/media/tone_knob.png">
+        </div>
+        <button id="savePreset">Save Preset</button><br>
+        <button id="getPreset">Get Preset</button><br>
+        <button id="updatePreset">Update Preset</button><br>
+        <!-- <button id="removePreset">Remove Preset</button><br> -->
+        {% endblock %}
+
+    </div>
+    
+    <script id="database" type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-analytics.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+        
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyAf09cxq3spSu5lmWw65vg2MRmGi9V1byE",
+            authDomain: "webpedal-50f53.firebaseapp.com",
+            databaseURL: "https://webpedal-50f53-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "webpedal-50f53",
+            storageBucket: "webpedal-50f53.appspot.com",
+            messagingSenderId: "195783090714",
+            appId: "1:195783090714:web:343bb79bf12476c7ae27a3",
+            measurementId: "G-RN925VPR7K"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+
+        import {getDatabase, ref, get, set, child, update, remove} from "https://www.gstatic.com/firebasejs/10.1.0/firebase-database.js";
+
+        const db = getDatabase();
+
+        var presetName = document.getElementById("presetName")
+
+        function insertData(){
+            set(ref(db, "Presets/"+presetName.value),{
+                volumeValue: volumeRange.value,
+                gainValue: gainRange.value,
+                toneValue: toneRange.value,
+            })
+            .then(() => {
+                alert("Preset saved successfully!");
+            })
+            .catch((error) => {
+                alert("Preset not saved. Error: "+error)
+            });
+        }
+
+
+        var databaseSize = 0;
+
+        function selectData(){
+            const dbref = ref(db);
+
+            get(child(dbref,"Presets/"+presetName.value))
+            .then((snapshot)=>{
+                if(snapshot.exists()){
+                    presetName.value = presetName.value;
+                    volumeRange.value = snapshot.val().volumeValue;
+                    volumeValue.innerText = snapshot.val().volumeValue;
+                    volumeRotate();
+                    gainRange.value = snapshot.val().gainValue;
+                    gainValue.innerText = snapshot.val().gainValue;
+                    gainRotate();
+                    toneRange.value = snapshot.val().toneValue;
+                    toneValue.innerText = snapshot.val().toneValue;
+                    toneRotate();
+                }
+                else {
+                    alert("No data found!");
+                }
+            })
+            .catch((error) => {
+                alert("Unsuccessful. Error: "+error);
+            });
+
+            get(child(dbref, "Presets"))
+            .then((snapshot) => {
+                if (snapshot.exists()){
+                    databaseSize = Object.keys(snapshot.val()).length
+                }
+            })
+
+            console.log("Database size: " + databaseSize)
+        }
+
+
+        function updateData(){
+            update(ref(db, "Presets/"+presetName.value),{
+            volumeValue: volumeRange.value,
+            gainValue: gainRange.value,
+            toneValue: toneRange.value,
+            })
+            .then(() => {
+                alert("Preset updated successfully!");
+            })
+            .catch((error) => {
+                alert("Preset not udpated. Error: "+error)
+            });
+        }
+
+        function removeData(){
+            remove(ref(db, "Presets/"+presetName.value))
+            .then(() => {
+                alert("Preset removed successfully!");
+            })
+            .catch((error) => {
+                alert("Preset not removed. Error: "+error)
+            });
+        }
+
+
+        var saveButton = document.getElementById("savePreset");
+        saveButton.addEventListener("click", insertData);
+        var getButton = document.getElementById("getPreset");
+        getButton.addEventListener("click", selectData);
+        var updateButton = document.getElementById("updatePreset");
+        updateButton.addEventListener("click", updateData);
+        var removeButton = document.getElementById("removePreset");
+        removeButton.addEventListener("click", removeData);
+
+
+    </script>
+
+    <script 
+        type="text/javascript" 
+        src="{{url_for('static', filename='index.js')}}">
+    </script>
+</body>
+</html>
